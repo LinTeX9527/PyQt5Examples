@@ -5,7 +5,7 @@
 #----------------------------------------------------------------------------#
 from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QSize
 from PyQt5.QtWidgets import (QApplication, QComboBox, QLabel, QStackedWidget,
-        QVBoxLayout, QWidget)
+        QVBoxLayout, QWidget, QPushButton)
 
 
 #============================================================================#
@@ -36,7 +36,7 @@ class PyMultiPageWidget(QWidget):
         self.setLayout(self.layout)
 
     def sizeHint(self):
-        return QSize(200, 150)
+        return QSize(400, 300)
 
     def count(self):
         return self.stackWidget.count()
@@ -99,6 +99,7 @@ if __name__ == "__main__":
     widget = PyMultiPageWidget()
     widget.addPage(QLabel('This is page #1'))
     widget.addPage(QLabel('This is page #2'))
+    widget.addPage(QPushButton("按钮"))
     widget.show()
     sys.exit(app.exec_())
 
