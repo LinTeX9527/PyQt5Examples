@@ -121,21 +121,32 @@ class PreviewWindow(QWidget):
 
 
 class ControllerWindow(QWidget):
+    """
+    控制窗口
+    """
     def __init__(self):
+        """
+        注意这里调用父类的初始化方法
+        """
         super(ControllerWindow, self).__init__()
 
+        # 初始化一个预览窗口
         self.previewWindow = PreviewWindow(self)
 
+        # 创建两个 QGroupBox 分组
         self.createTypeGroupBox()
         self.createHintsGroupBox()
 
+        # 右下角添加一个按钮，方便退出应用程序
         quitButton = QPushButton("&Quit")
+        # 退出应用程序的槽函数是 self.close() 部件自带的槽函数
         quitButton.clicked.connect(self.close)
 
         bottomLayout = QHBoxLayout()
         bottomLayout.addStretch()
         bottomLayout.addWidget(quitButton)
 
+        # 初始化UI
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.typeGroupBox)
         mainLayout.addWidget(self.hintsGroupBox)
@@ -146,8 +157,10 @@ class ControllerWindow(QWidget):
         self.updatePreview()
 
     def updatePreview(self):
+        # 初始化一个窗体标志
         flags = Qt.WindowFlags()
 
+        # 因为QRadioButton是互斥的，所以这里只能是=符号，获取用户选择的窗体标志
         if self.windowRadioButton.isChecked():
             flags = Qt.Window
         elif self.dialogRadioButton.isChecked():
@@ -165,6 +178,7 @@ class ControllerWindow(QWidget):
         elif self.splashScreenRadioButton.isChecked():
             flags = Qt.SplashScreen
 
+        # 而这些QCheckBox是可以多选的，所以用|符号
         if self.msWindowsFixedSizeDialogCheckBox.isChecked():
             flags |= Qt.MSWindowsFixedSizeDialogHint            
         if self.x11BypassWindowManagerCheckBox.isChecked():
@@ -176,22 +190,28 @@ class ControllerWindow(QWidget):
         if self.windowSystemMenuCheckBox.isChecked():
             flags |= Qt.WindowSystemMenuHint
         if self.windowMinimizeButtonCheckBox.isChecked():
+            # 允许“最小化”按钮可见
             flags |= Qt.WindowMinimizeButtonHint
         if self.windowMaximizeButtonCheckBox.isChecked():
+            # 允许“最大化”按钮可见
             flags |= Qt.WindowMaximizeButtonHint
         if self.windowCloseButtonCheckBox.isChecked():
+            # 允许“关闭”按钮可见
             flags |= Qt.WindowCloseButtonHint
         if self.windowContextHelpButtonCheckBox.isChecked():
             flags |= Qt.WindowContextHelpButtonHint
         if self.windowShadeButtonCheckBox.isChecked():
             flags |= Qt.WindowShadeButtonHint
         if self.windowStaysOnTopCheckBox.isChecked():
+            # NOTE: 设置窗体始终在界面的最上方，不会被其他应用的窗体遮挡
             flags |= Qt.WindowStaysOnTopHint
         if self.windowStaysOnBottomCheckBox.isChecked():
+            # NOTE: 设置窗体始终排在最下面
             flags |= Qt.WindowStaysOnBottomHint
         if self.customizeWindowHintCheckBox.isChecked():
             flags |= Qt.CustomizeWindowHint
 
+        # NOTE: 设置窗体标志，在这里生效
         self.previewWindow.setWindowFlags(flags)
 
         pos = self.previewWindow.pos()
@@ -201,13 +221,14 @@ class ControllerWindow(QWidget):
 
         if pos.y() < 0:
             pos.setY(0)
-
+        # 改变位置重新显示
         self.previewWindow.move(pos)
         self.previewWindow.show()
 
     def createTypeGroupBox(self):
         self.typeGroupBox = QGroupBox("Type")
 
+        # 先创建按钮对象，但是并没有设置摆放的位置
         self.windowRadioButton = self.createRadioButton("Window")
         self.dialogRadioButton = self.createRadioButton("Dialog")
         self.sheetRadioButton = self.createRadioButton("Sheet")
@@ -216,8 +237,10 @@ class ControllerWindow(QWidget):
         self.toolRadioButton = self.createRadioButton("Tool")
         self.toolTipRadioButton = self.createRadioButton("Tooltip")
         self.splashScreenRadioButton = self.createRadioButton("Splash screen")
+        # 设置默认选项
         self.windowRadioButton.setChecked(True)
 
+        # 用QGridLayout来摆放这些按钮
         layout = QGridLayout()
         layout.addWidget(self.windowRadioButton, 0, 0)
         layout.addWidget(self.dialogRadioButton, 1, 0)
@@ -274,6 +297,9 @@ class ControllerWindow(QWidget):
 
 
 if __name__ == '__main__':
+    """
+    主程序，可以在任何地方导入其他的模块
+    """
 
     import sys
 
