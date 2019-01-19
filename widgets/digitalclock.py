@@ -47,11 +47,16 @@ from PyQt5.QtWidgets import QApplication, QLCDNumber
 
 
 class DigitalClock(QLCDNumber):
+    """
+    注意这个类继承自 QLCDNumber 
+    """
     def __init__(self, parent=None):
         super(DigitalClock, self).__init__(parent)
 
+        # 设置显示的格式
         self.setSegmentStyle(QLCDNumber.Filled)
 
+        # 定时器的简单用法
         timer = QTimer(self)
         timer.timeout.connect(self.showTime)
         timer.start(1000)
@@ -62,9 +67,11 @@ class DigitalClock(QLCDNumber):
         self.resize(150, 60)
 
     def showTime(self):
+        # QTime 获取当前时间
         time = QTime.currentTime()
         text = time.toString('hh:mm')
         if (time.second() % 2) == 0:
+            # 每隔一秒钟把中间的冒号去掉
             text = text[:2] + ' ' + text[3:]
 
         self.display(text)
